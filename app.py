@@ -39,21 +39,21 @@ quick_replies_list = [{
 ]
 @app.route('/', methods=['GET'])
 def handle_verification():
-    print "Handling Verification."
+    print("Handling Verification.")
     if request.args.get('hub.verify_token', '') == 'my_voice_is_my_password_verify_me':
-        print "Verification successful!"
+        print("Verification successful!")
         return request.args.get('hub.challenge', '')
     else:
-        print "Verification failed!"
+        print("Verification failed!")
         return 'Error, wrong validation token'
 
 @app.route('/', methods=['POST'])
 def handle_messages():
-    print "Handling Messages"
+    print("Handling Messages")
     payload = request.get_data()
-    print payload
+    print(payload)
     for sender, message in messaging_events(payload):
-        print "Incoming from %s: %s" % (sender, message)
+        print("Incoming from %s: %s" % (sender, message))
         send_message(PAT, sender, message)
     return "ok"
 
@@ -73,11 +73,11 @@ def messaging_events(payload):
 def send_message(token, recipient, text):
     """Send the message text to recipient with id recipient.
     """
-    if "meme" in text.lower():
+    if b"meme" in text.lower():
         subreddit_name = "memes"
-    elif "shower" in text.lower():
+    elif b"shower" in text.lower():
         subreddit_name = "Showerthoughts"
-    elif "joke" in text.lower():
+    elif b"joke" in text.lower():
         subreddit_name = "Jokes"
     else:
         subreddit_name = "GetMotivated"
@@ -181,7 +181,7 @@ def send_message(token, recipient, text):
             headers={'Content-type': 'application/json'})
 
     if r.status_code != requests.codes.ok:
-        print r.text
+        print(r.text)
 
 def get_or_create(session, model, **kwargs):
     instance = session.query(model).filter_by(**kwargs).first()
